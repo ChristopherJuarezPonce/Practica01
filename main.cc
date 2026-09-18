@@ -18,6 +18,7 @@ struct PanelSolar {
 void registrarPanel(PanelSolar &panel);
 float calcularEficiencia(PanelSolar *panel);
 void determinarEstado(PanelSolar *panel);
+PanelSolar* obtenerPanelCritico(PanelSolar paneles[], int cantidad);
 
 
 int main(){
@@ -53,6 +54,16 @@ int main(){
         calcularEficiencia(&paneles[i]);
         determinarEstado(&paneles[i]);
     }
+
+    //Parte 4: Obtener el panel solar con la eficiencia mas baja
+    PanelSolar *panelCritico = obtenerPanelCritico(paneles, n);
+    std::cout << "\nEl panel solar con la eficiencia mas baja es: " << std::endl;
+    std::cout << "Codigo: " << panelCritico->codigo << std::endl;
+    std::cout << "Ubicacion: " << panelCritico->ubicacion << std::endl;
+    std::cout << "Potencia teorica: " << panelCritico->potenciaTeorica << std::endl;
+    std::cout << "Lecturas: [" << panelCritico->lecturas[0] << ", " << panelCritico->lecturas[1] << ", " << panelCritico->lecturas[2] << "]" << std::endl;
+    std::cout << "Eficiencia: " << panelCritico->eficiencia << "%" << std::endl;
+    std::cout << "Estado operativo: " << panelCritico->estadoOperativo << std::endl;
     
 
     return 0;
@@ -96,4 +107,18 @@ void determinarEstado(PanelSolar *panel){
     }
 }
 
+//Obtener el panel solar con la eficiencia mas baja
+PanelSolar* obtenerPanelCritico(PanelSolar paneles[], int cantidad){
+    // Asumimos inicialmente que el primer elemento es el más crítico
+    PanelSolar *critico = &paneles[0];
+    for (int i = 1; i < cantidad; i++)
+    {
+        if (paneles[i].eficiencia < critico->eficiencia)
+        {
+            critico = &paneles[i]; // Apuntamos a la dirección del nuevo máximo
+        }
+    }
+
+    return critico; 
+}
 
