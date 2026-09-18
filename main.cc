@@ -17,9 +17,9 @@ struct PanelSolar {
 //Declaracion de todas las funciones para el programa
 void registrarPanel(PanelSolar &panel);
 float calcularEficiencia(PanelSolar *panel);
-void determinarEstado(PanelSolar *panel);
+void determinarEstado(PanelSolar &panel);
 PanelSolar* obtenerPanelCritico(PanelSolar paneles[], int cantidad);
-
+void aplicarMantenimiento(PanelSolar &panel, float porcentajeMejora);
 
 int main(){
 
@@ -34,7 +34,7 @@ int main(){
     {
         std::cout << "Ingrese el numero de paneles (maximo 10): ";
         std::cin >> n;
-        if(n < 1 || n > 10);
+        if(n < 1 || n > 10)
         {
             std::cout << "El numero de elementos es invalido. Debe ser entre el 1 y 10." << std::endl;
         }
@@ -52,7 +52,7 @@ int main(){
     for (int i = 0; i < n; i++)
     {
         calcularEficiencia(&paneles[i]);
-        determinarEstado(&paneles[i]);
+        determinarEstado(paneles[i]);
     }
 
     //Parte 4: Obtener el panel solar con la eficiencia mas baja
@@ -64,7 +64,21 @@ int main(){
     std::cout << "Lecturas: [" << panelCritico->lecturas[0] << ", " << panelCritico->lecturas[1] << ", " << panelCritico->lecturas[2] << "]" << std::endl;
     std::cout << "Eficiencia: " << panelCritico->eficiencia << "%" << std::endl;
     std::cout << "Estado operativo: " << panelCritico->estadoOperativo << std::endl;
-    
+
+    //Parte 5: Aplicar mantenimiento al panel solar con la eficiencia mas baja
+    float porcentajeMejora;
+    std::cout << "\n----------------------------------------------------------------------" << std::endl;
+    std::cout << "Ingrese el porcentaje de mejora para el mantenimiento del panel solar (%): ";
+    std::cin >> porcentajeMejora;
+    // Aplicar el mantenimiento al panel solar con la eficiencia más baja
+    aplicarMantenimiento(*panelCritico, porcentajeMejora);
+    std::cout << "\n----------------------------------------------------------------------" << std::endl;
+    std::cout << "Despues del mantenimiento, el panel solar con la eficiencia mas baja es: " << std::endl;
+    std::cout << "Codigo: " << panelCritico->codigo << std::endl;
+    std::cout << "Ubicacion: " << panelCritico->ubicacion << std::endl;
+    std::cout << "Nuevas lecturas: [" << panelCritico->lecturas[0] << ", " << panelCritico->lecturas[1] << ", " << panelCritico->lecturas[2] << "]" << std::endl;
+    std::cout << "Nuevas eficiencia: " << panelCritico->eficiencia << "%" << std::endl;
+    std::cout << "Estado operativo: " << panelCritico->estadoOperativo << std::endl;
 
     return 0;
 }
@@ -95,15 +109,15 @@ float calcularEficiencia(PanelSolar *panel){
 }
 
 //Determinar el estado operativo del panel solar
-void determinarEstado(PanelSolar *panel){
-    if (panel->eficiencia >= 0.0f && panel->eficiencia <= 50.0f) {
-        panel->estadoOperativo = "DEFICIENTE";
-    } else if (panel->eficiencia > 50.0f && panel->eficiencia <= 75.0f) {
-        panel->estadoOperativo = "ACEPTABLE";
-    } else if (panel->eficiencia > 75.0f && panel->eficiencia <= 100.0f) {
-        panel->estadoOperativo = "OPTIMO";
-    } else if (panel->eficiencia > 100.0f) {
-        panel->estadoOperativo = "ANOMALIA";
+void determinarEstado(PanelSolar &panel){
+    if (panel.eficiencia >= 0.0f && panel.eficiencia <= 50.0f) {
+        panel.estadoOperativo = "DEFICIENTE";
+    } else if (panel.eficiencia > 50.0f && panel.eficiencia <= 75.0f) {
+        panel.estadoOperativo = "ACEPTABLE";
+    } else if (panel.eficiencia > 75.0f && panel.eficiencia <= 100.0f) {
+        panel.estadoOperativo = "OPTIMO";
+    } else if (panel.eficiencia > 100.0f) {
+        panel.estadoOperativo = "ANOMALIA";
     }
 }
 
@@ -121,4 +135,17 @@ PanelSolar* obtenerPanelCritico(PanelSolar paneles[], int cantidad){
 
     return critico; 
 }
+
+//Aplicar mantenimiento a un panel solar para mejorar su eficiencia
+void aplicarMantenimiento(PanelSolar &panel, float porcentajeMejora){
+    for (int i = 0; i < 3; i++)
+    {
+        // Formula para mejorar la lectura del panel solar en un porcentaje dado
+        panel.lecturas[i] = panel.lecturas[i] * (1.0f + porcentajeMejora / 100.0f);
+    }
+    // Recalcular la eficiencia después del mantenimiento
+    calcularEficiencia(&panel);
+    determinarEstado(panel);
+}
+
 
