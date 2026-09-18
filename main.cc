@@ -17,6 +17,7 @@ struct PanelSolar {
 //Declaracion de todas las funciones para el programa
 void registrarPanel(PanelSolar &panel);
 float calcularEficiencia(PanelSolar *panel);
+void determinarEstado(PanelSolar *panel);
 
 
 int main(){
@@ -46,9 +47,11 @@ int main(){
     }
 
     //parte 2: Calcular la eficiencia de cada panel solar
+    //parte 3: Determinar el estado operativo de cada panel solar
     for (int i = 0; i < n; i++)
     {
         calcularEficiencia(&paneles[i]);
+        determinarEstado(&paneles[i]);
     }
     
 
@@ -79,4 +82,18 @@ float calcularEficiencia(PanelSolar *panel){
     panel->eficiencia = (promedioLecturas / panel->potenciaTeorica) * 100.0;
     return panel->eficiencia; //Retornar la eficiencia calculada
 }
+
+//Determinar el estado operativo del panel solar
+void determinarEstado(PanelSolar *panel){
+    if (panel->eficiencia >= 0.0f && panel->eficiencia <= 50.0f) {
+        panel->estadoOperativo = "DEFICIENTE";
+    } else if (panel->eficiencia > 50.0f && panel->eficiencia <= 75.0f) {
+        panel->estadoOperativo = "ACEPTABLE";
+    } else if (panel->eficiencia > 75.0f && panel->eficiencia <= 100.0f) {
+        panel->estadoOperativo = "OPTIMO";
+    } else if (panel->eficiencia > 100.0f) {
+        panel->estadoOperativo = "ANOMALIA";
+    }
+}
+
 
