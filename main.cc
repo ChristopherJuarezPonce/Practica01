@@ -16,6 +16,7 @@ struct PanelSolar {
 
 //Declaracion de todas las funciones para el programa
 void registrarPanel(PanelSolar &panel);
+float calcularEficiencia(PanelSolar *panel);
 
 
 int main(){
@@ -43,6 +44,12 @@ int main(){
         std::cout << "Panel " << i + 1 << ":" << std::endl;
         registrarPanel(paneles[i]);
     }
+
+    //parte 2: Calcular la eficiencia de cada panel solar
+    for (int i = 0; i < n; i++)
+    {
+        calcularEficiencia(&paneles[i]);
+    }
     
 
     return 0;
@@ -63,3 +70,13 @@ void registrarPanel(PanelSolar &panel){
     std::cout << "Ingrese la lectura 3: ";
     std::cin >> panel.lecturas[2];
 }
+
+//Calcular la eficiencia de cada panel solar
+float calcularEficiencia(PanelSolar *panel){
+    //Calcular el promedio de las lecturas 
+    float promedioLecturas = (panel->lecturas[0] + panel->lecturas[1] + panel->lecturas[2]) / 3.0f;
+    //Calcular la eficiencia del panel solar
+    panel->eficiencia = (promedioLecturas / panel->potenciaTeorica) * 100.0;
+    return panel->eficiencia; //Retornar la eficiencia calculada
+}
+
